@@ -45,7 +45,7 @@ if fqdn
    ip_address "127.0.0.1"
    hostname "localhost"
    action :create
-   not_if "grep 127.0.0.1 /etc/hosts | grep -q localhost"
+   not_if "grep 127.0.0.1 /etc/hosts | egrep -q localhost$"
   end
 
   hostsfile_entry "set hostname" do
@@ -54,7 +54,8 @@ if fqdn
     aliases [ hostname ]
     action :create
     notifies :reload, "ohai[reload]"
-    not_if "grep 127.0.1.1 /etc/hosts | grep -q $(hostname -f)"
+    #not_if "grep 127.0.1.1 /etc/hosts | grep -q $(hostname -f)"
+    not_if "grep 127.0.1.1 /etc/hosts | grep -q "+fqdn
   end
 
   ohai "reload" do
